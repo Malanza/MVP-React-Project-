@@ -1,7 +1,7 @@
 import React, { Fragment, useState } from "react";
 import axios from "axios";
 
-const EditGoals = ( {goal} ) =>{
+const EditGoals = ( {goal, setSubmitGoal} ) =>{
     const [description, setDescription] = useState(goal.goals);
     // Allows us to make the edit on the input box 
     const handleEdit = (e) =>{
@@ -18,7 +18,8 @@ const EditGoals = ( {goal} ) =>{
           const {data} = await axios.put(`http://localhost:5000/goals/${goal.id}`, {
             goals: description
           })
-          console.log(data); 
+          console.log(data);
+          setSubmitGoal(true);
         } catch (err) {
             console.error(err.message);
         }
@@ -51,7 +52,7 @@ const EditGoals = ( {goal} ) =>{
       
       <div class="modal-footer">
          
-         <button type="button" class="btn btn-warning" data-dismiss="modal" onClick={e => updateDescription(e)}>Edit</button>
+         <button type="button" class="btn btn-success" data-dismiss="modal" onClick={e => updateDescription(e)}>Submit</button>
       
         
         <button type="button" class="btn btn-danger" data-dismiss="modal" onClick={handleEditBox}>Close</button>

@@ -1,30 +1,36 @@
-import React, { Fragment, useState } from "react";
-import axios from 'axios'
-const InputGoals = () => {
+import { Fragment } from "react";
+import axios from "axios";
+import EditGoals from "./EditGoals";
+// InputGoals let us render the goals from our database to whatever format in HTML we want. In this case in tables with rows. 
+// we also get goal from our GoalsItems and the setSubmitGoal from the App.js file this allows to destructure and use the functionality they provide 
+const InputGoals = ({goal, setSubmitGoal}) => {
     
-    const [goals, setGoals] = useState('');
-
-    const onSubmitform = async (e) =>{
-        e.preventDefault();
+    //this handles my delete function 
+    const handleDelete = async (e) => {
         try {
-           const response = await axios.post("http://localhost:5000/goals",{goals});
-           console.log(response.data);
-        } catch (err) {
-            console.log(err.response);
+            const response = await axios.delete(`http://localhost:5000/goals/${goal.id}`);
+            console.log(response)
+            setSubmitGoal(true)
+        } catch (error) {
+            console.log(error.message)
         }
     }
-    
-    const handleInput = (e) =>{
-        setGoals(e.target.value)
-    }
-    
-    return <Fragment>
-        <h1 className="text-center mt-5" id="header">My Goals List</h1>
-        <form className="d-flex mt-5" onSubmit={onSubmitform}>
-            <input type='text' className="form-control" value={goals} onChange={handleInput}/>
-                <button className="btn btn-success">Add</button>
-           </form>
-        </Fragment>;
-};
 
-export default InputGoals
+    return <Fragment>
+            <tr key={goal.id}>
+        <td id='goals-description'>{goal.goals}</td>
+            <td><EditGoals goal={goal} setSubmitGoal={setSubmitGoal}/>
+            </td>
+            <td>
+            <button className="btn btn-danger" onClick={handleDelete}>Delete</button>
+        </td>
+      </tr>
+      </Fragment>
+    
+  
+            
+    
+    
+}
+
+export default InputGoals;
